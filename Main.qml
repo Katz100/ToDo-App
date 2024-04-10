@@ -19,12 +19,12 @@ Window {
         width: parent.width
         Text {
             text: model.title
-            font.pixelSize: 24
+            font.pixelSize: 20
         }
 
         Text {
            text: model.desc
-           font.pixelSize: 24
+           font.pixelSize: 20
         }
 
         }
