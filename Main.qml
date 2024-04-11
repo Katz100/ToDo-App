@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls // for s
 
 Window {
     width: 640
@@ -14,20 +15,37 @@ Window {
     Component {
         id: toDoDelegate
 
-        Column {
-        spacing: 10
-        width: parent.width
-        Text {
-            text: model.title
-            font.pixelSize: 20
+        Rectangle {
+            width: parent.width
+            color: parent.color
+            height: 100
+            Text {
+                id: titleTxt
+                width: parent.width - 20
+                text: model.title
+                font.pixelSize: 20
+                clip: true
+                wrapMode: WordWrap
+            }
+
+            TextInput {
+                id: descTxt
+                width: parent.width - 20
+                height: parent.height - titleTxt.height
+                text: model.desc
+                color: "gray"
+                font.pixelSize: 14
+                anchors.top: titleTxt.bottom
+                clip: true
+                wrapMode: Text.WordWrap
+                readOnly: true
+
+            }
+
+
         }
 
-        Text {
-           text: model.desc
-           font.pixelSize: 20
-        }
 
-        }
     }
 
     Rectangle {
@@ -43,6 +61,7 @@ Window {
         Text {
             text: "<b>Todo</b>"
             font.pointSize: 24
+            anchors.centerIn: parent
         }
     }
 
@@ -84,42 +103,62 @@ Window {
                 id: todoTitleBox
                 color: "white"
                 height: 30
+                border.color: "black"
+                border.width: 1
                 anchors {
                     left: parent.left
                     top: parent. top
-                    right: parent.right
+
                 }
 
-            TextInput {
-                id: toDoTitle
-                text: "Title"
-                anchors.fill: parent
-                focus: true
-                activeFocusOnTab: true
-                color: focus ? "black" : "gray"
+                width: parent.width - 20
 
+                TextInput {
+                    property int __limit: 30
+                    id: toDoTitle
+                    x: 2
+                    text: "Title"
+                    width: parent.width - 20
+                    height: parent.height
+                    clip: true
+                    focus: true
+                    activeFocusOnTab: true
+                    color: focus ? "black" : "gray"
+                    wrapMode: TextInput.WordWrap
+                    onTextChanged: if (length > __limit) remove(__limit, length)
+                }
             }
-        }
             Rectangle {
                 id: todoDescBox
                 color: "white"
-                height: 30
+                height: 50
+                border.color: "black"
+                border.width: 1
                 anchors {
                     left: parent.left
                     top: todoTitleBox.bottom
                     topMargin: 20
-                    right: parent.right
+
                 }
 
-            TextInput {
-                anchors.fill: parent
-                text: "Description"
-                id: toDoDesc
-                activeFocusOnTab: true
-                color: focus ? "black" : "gray"
+                width: parent.width - 20
 
+                TextInput {
+                    property int __limit: 150
+                    id: toDoDesc
+                    x: 2
+                    width: parent.width - 5
+                    height: parent.height
+                    text: "Description"
+                    clip: true
+                    activeFocusOnTab: true
+                    color: focus ? "black" : "gray"
+                    wrapMode: TextInput.Wrap
+                    maximumLength: 291
+
+                    onTextChanged: if (length > __limit) remove(__limit, length)
+                }
             }
-         }
             MyButton {
                 text: "Add item"
                 textColor: "white"
