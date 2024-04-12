@@ -2,11 +2,14 @@ import QtQuick
 import QtQuick.Controls // for s
 
 Window {
+    id: root
     width: 640
     height: 480
     visible: true
     title: qsTr("Hello World")
     color: "lightgray"
+
+
 
     ListModel {
         id: listModel
@@ -16,28 +19,66 @@ Window {
         id: toDoDelegate
 
         Rectangle {
-            width: parent.width
-            color: parent.color
+            id: toDoRect
+            width: root.width / 2
+            color: "lightblue"
             height: 100
+            border.color: "black"
+            border.width: 2
+            Image {
+                id: trashcan
+                source: "trashimage/trashcan.jpg"
+                fillMode: Image.Stretch
+                width: 50
+                height: 50
+                anchors {
+                    right: parent.right
+                    top: parent.top
+                    topMargin: 20
+                    rightMargin: 2
+                }
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "red"
+                    opacity: imageMouse.containsPress ? 0.5 : 0.25
+                    radius: 20
+                    visible: imageMouse.containsMouse
+                }
+
+                MouseArea {
+                    id: imageMouse
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    onClicked: {
+                        listModel.remove(index)
+                    }
+                }
+
+            }
+
             Text {
                 id: titleTxt
-                width: parent.width - 20
+                x: 2
+                width: parent.width - 20 - trashcan.width
                 text: model.title
                 font.pixelSize: 20
                 clip: true
-                wrapMode: WordWrap
+                wrapMode: Text.WordWrap
             }
+
 
             TextInput {
                 id: descTxt
-                width: parent.width - 20
+                x: 2
+                width: parent.width - 20 - trashcan.width
                 height: parent.height - titleTxt.height
                 text: model.desc
                 color: "gray"
                 font.pixelSize: 14
                 anchors.top: titleTxt.bottom
                 clip: true
-                wrapMode: Text.WordWrap
+                wrapMode: TextInput.Wrap
                 readOnly: true
 
             }
@@ -81,7 +122,7 @@ Window {
             width: parent.width / 2
             height: parent.height - 20
             color: "lightblue"
-            radius: 20
+
 
             ListView {
                 id: lv
@@ -89,6 +130,7 @@ Window {
                 clip: true
                 model: listModel
                 delegate: toDoDelegate
+                spacing: 2
 
             }
         }
@@ -97,7 +139,7 @@ Window {
             width: parent.width / 2
             height: parent.height - 20
             color: "lightblue"
-            radius: 20
+
 
             Rectangle {
                 id: todoTitleBox
@@ -173,6 +215,7 @@ Window {
                     listModel.append({"title": toDoTitle.text, "desc": toDoDesc.text})
                     toDoTitle.text = ""
                     toDoDesc.text = ""
+
                 }
             }
         }
