@@ -1,5 +1,5 @@
 import QtQuick
-import QtQuick.Controls // for s
+import QtQuick.LocalStorage
 
 Window {
     id: root
@@ -61,7 +61,7 @@ Window {
                 id: titleTxt
                 x: 2
                 width: parent.width - 20 - trashcan.width
-                text: model.title
+                text: model.title + ": " + model.index
                 font.pixelSize: 20
                 clip: true
                 wrapMode: Text.WordWrap
@@ -75,7 +75,7 @@ Window {
                 height: parent.height - titleTxt.height
                 text: model.desc
                 color: "gray"
-                font.pixelSize: 14
+                font.pixelSize: 12
                 anchors.top: titleTxt.bottom
                 clip: true
                 wrapMode: TextInput.Wrap
@@ -220,5 +220,44 @@ Window {
             }
         }
 
+    }
+
+    Component.onCompleted: {
+        var db = LocalStorage.openDatabaseSync("toDoDatabase", "1.0", "Hold todo items", 10000);
+        db.transaction(
+                    function(tx)
+                    {
+                        tx.executeSql('CREATE TABLE IF NOT EXISTS Todo (
+                                        todo_index INTEGER PRIMARY KEY,
+                                        title TEXT,
+                                        description TEXT)');
+
+                        var rs = tx.executeSql('SELECT title, description FROM Todo');
+                        for (var i = 0; i < rs.rows.length; i++)
+                        {
+                            listModel.append({"title": rs.rows.item(i).title, "desc": rs.rows.item(i).description})
+                        }
+
+                    }
+
+                    )
+    }
+
+    Component.onDestruction: {
+        var db = LocalStorage.openDatabaseSync("toDoDatabase", "1.0", "Hold todo items", 10000);
+        db.transaction(
+                    function(tx)
+                    {
+                        tx.executeSql('DELETE FROM Todo');
+
+                        for (var i = 0; i < listModel.count; i++)
+                        {
+                            var item = listModel.get(i);
+                            tx.executeSql('INSERT INTO Todo (todo_index, title, description)
+                                           VALUES (?, ?, ?)', [i, item.title, item.desc]);
+                        }
+                    }
+
+                    )
     }
 }
