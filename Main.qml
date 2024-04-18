@@ -1,14 +1,16 @@
 import QtQuick
 import QtQuick.LocalStorage
 
+
 Window {
     id: root
     width: 640
     height: 480
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("ToDo")
     color: "lightgray"
 
+    property var db: LocalStorage.openDatabaseSync("toDoDatabase", "1.0", "Hold todo items", 10000)
 
 
     ListModel {
@@ -61,7 +63,7 @@ Window {
                 id: titleTxt
                 x: 2
                 width: parent.width - 20 - trashcan.width
-                text: model.title + ": " + model.index
+                text: model.title
                 font.pixelSize: 20
                 clip: true
                 wrapMode: Text.WordWrap
@@ -223,7 +225,7 @@ Window {
     }
 
     Component.onCompleted: {
-        var db = LocalStorage.openDatabaseSync("toDoDatabase", "1.0", "Hold todo items", 10000);
+
         db.transaction(
                     function(tx)
                     {
@@ -243,8 +245,8 @@ Window {
                     )
     }
 
+
     Component.onDestruction: {
-        var db = LocalStorage.openDatabaseSync("toDoDatabase", "1.0", "Hold todo items", 10000);
         db.transaction(
                     function(tx)
                     {
@@ -260,4 +262,9 @@ Window {
 
                     )
     }
+
+
+
+
+
 }
