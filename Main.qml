@@ -142,83 +142,65 @@ Window {
             height: parent.height - 20
             color: "lightblue"
 
-
-            Rectangle {
-                id: todoTitleBox
-                color: "white"
+            TextField {
+                id: toDoTitle
+                text: "Title"
+                focus: true
+                characterLimit: 40
+                width: parent.width - 20
                 height: 30
-                border.color: "black"
-                border.width: 1
                 anchors {
                     left: parent.left
-                    top: parent. top
-
+                    top: parent.top
                 }
 
-                width: parent.width - 20
-
-                TextInput {
-                    property int __limit: 30
-                    id: toDoTitle
-                    x: 2
-                    text: "Title"
-                    width: parent.width - 20
-                    height: parent.height
-                    clip: true
-                    focus: true
-                    activeFocusOnTab: true
-                    color: focus ? "black" : "gray"
-                    wrapMode: TextInput.WordWrap
-                    onTextChanged: if (length > __limit) remove(__limit, length)
-                }
             }
-            Rectangle {
-                id: todoDescBox
-                color: "white"
+
+            TextField {
+                id: toDoDesc
+                text: "Description"
                 height: 50
-                border.color: "black"
-                border.width: 1
+                width: parent.width - 20
+                characterLimit: 150
                 anchors {
                     left: parent.left
-                    top: todoTitleBox.bottom
+                    top: toDoTitle.bottom
                     topMargin: 20
-
                 }
 
-                width: parent.width - 20
 
-                TextInput {
-                    property int __limit: 150
-                    id: toDoDesc
-                    x: 2
-                    width: parent.width - 5
-                    height: parent.height
-                    text: "Description"
-                    clip: true
-                    activeFocusOnTab: true
-                    color: focus ? "black" : "gray"
-                    wrapMode: TextInput.Wrap
-                    maximumLength: 291
-
-                    onTextChanged: if (length > __limit) remove(__limit, length)
-                }
             }
-            MyButton {
-                text: "Add item"
-                textColor: "white"
-                color: "red"
+
+
+            Column {
+                spacing: 20
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     bottom: parent.bottom
                     bottomMargin: 10
                 }
+                MyButton {
+                    text: "Add item"
+                    textColor: "white"
+                    color: "#4CAF50"
 
-                onClicked: {
-                    listModel.append({"title": toDoTitle.text, "desc": toDoDesc.text})
-                    toDoTitle.text = ""
-                    toDoDesc.text = ""
+
+                    onClicked: {
+                        listModel.append({"title": toDoTitle.text, "desc": toDoDesc.text})
+                        toDoTitle.text = ""
+                        toDoDesc.text = ""
+
+                    }
+                }
+
+                MyButton {
+                    text: "Delete All"
+                    textColor: "white"
+                    color: "#F44336"
+                    onClicked: listModel.clear()
 
                 }
+
             }
         }
 
