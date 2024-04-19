@@ -11,7 +11,7 @@ Window {
     color: "lightgray"
 
     property var db: LocalStorage.openDatabaseSync("toDoDatabase", "1.0", "Hold todo items", 10000)
-
+    property bool titlePresent: true
 
     ListModel {
         id: listModel
@@ -73,6 +73,7 @@ Window {
             TextField {
                 id: toDoTitle
                 text: "Title"
+                borderColor: titlePresent ? "black" : "red"
                 focus: true
                 characterLimit: 40
                 width: parent.width - 20
@@ -114,10 +115,15 @@ Window {
 
 
                     onClicked: {
-                        listModel.append({"title": toDoTitle.text, "desc": toDoDesc.text})
-                        toDoTitle.text = ""
-                        toDoDesc.text = ""
+                        if (toDoTitle.text === ""){
+                            titlePresent = false
+                        } else {
 
+                            listModel.append({"title": toDoTitle.text, "desc": toDoDesc.text})
+                            toDoTitle.text = ""
+                            toDoDesc.text = ""
+                            titlePresent = true
+                        }
                     }
                 }
 

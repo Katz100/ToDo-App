@@ -4,12 +4,11 @@ FocusScope {
     id: root
     property alias text: txt.text
     required property int characterLimit
-
+    property alias borderColor: box.border.color
 
     Rectangle {
         id: box
         color: "white"
-        border.color: "black"
         border.width: 1
         anchors.fill: parent
         TextInput {
@@ -18,12 +17,20 @@ FocusScope {
             width: parent.width - 5
             height: parent.height
             clip: true
-            focus: true
             activeFocusOnTab: true
-            color: focus ? "black" : "gray"
+            color: activeFocus ? "black" : "gray"
             wrapMode: TextInput.Wrap
             onTextChanged: if (length > characterLimit) remove (characterLimit, length)
 
+        }
+    }
+    Text {
+        text: txt.length + "/" + characterLimit
+        font.pointSize: 9
+        color: "black"
+        anchors {
+            top: box.bottom
+            right: parent.right
         }
     }
 }
