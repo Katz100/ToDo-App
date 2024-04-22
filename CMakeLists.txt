@@ -22,7 +22,10 @@ qt_add_qml_module(appTodo
     RESOURCES
 
     trashimage/trashcan.jpg
+    trashimage/edit.png
+    trashimage/cancel.png
     QML_FILES ToDoDelegate.qml
+    QML_FILES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

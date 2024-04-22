@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.LocalStorage
 
-
 Window {
     id: root
     width: 640
@@ -13,11 +12,10 @@ Window {
     property var db: LocalStorage.openDatabaseSync("toDoDatabase", "1.0", "Hold todo items", 10000)
     property bool titlePresent: true
 
+
     ListModel {
         id: listModel
     }
-
-
 
     Rectangle {
         id: header
@@ -75,7 +73,7 @@ Window {
                 text: "Title"
                 borderColor: titlePresent ? "black" : "red"
                 focus: true
-                characterLimit: 40
+                characterLimit: 30
                 width: parent.width - 20
                 height: 30
                 anchors {
