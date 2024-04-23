@@ -1,5 +1,5 @@
 import QtQuick
-
+import QtQuick.Controls
 Component {
     id: toDoDelegate
 
@@ -12,58 +12,111 @@ Component {
         height: 100
         border.color: "black"
         border.width: 2
-        property bool __edit: true
 
+        Drawer {
+            id: drawer
+            width: parent.width / 2
+            height: root.height
+            edge: Qt.LeftEdge
 
-
-            Image {
-                id: editButton
-                source:  __edit ? "trashimage/edit.png" : "trashimage/cancel.png"
-                width: 30
-                height: 30
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                anchors.topMargin: 200
-
-                MouseArea {
-                    id: editMouse
-                    anchors.fill: parent
-                    onClicked: __edit = !__edit
+            Column {
+                spacing: 10
+                Text {
+                    text: "Enter new title"
                 }
 
-            }
+                TextField {
+                    id: editTitleBox
+                }
 
-            Image {
-                id: trashcan
-                source: "trashimage/trashcan.jpg"
-                fillMode: Image.Stretch
-                width: 50
-                height: 50
+                Text {
+                    text: "Enter new description"
+                }
+
+                TextField {
+                    id: editDescBox
+                }
+            }
+            Row {
+                spacing: 20
 
                 anchors {
-                    right: parent.right
                     bottom: parent.bottom
-                    rightMargin: 2
-                    bottomMargin: 2
-                }
-                Rectangle {
-                    anchors.fill: parent
-                    color: "red"
-                    opacity: imageMouse.containsPress ? 0.5 : 0.25
-                    radius: 20
-                    visible: imageMouse.containsMouse
+                    horizontalCenter: parent.horizontalCenter
                 }
 
-                MouseArea {
-                    id: imageMouse
-                    hoverEnabled: true
-                    anchors.fill: parent
+                MyButton {
+                    id: cancelButton
+                    text: "Cancel"
+                    textColor: "white"
+                    color: "#F44336"
+                    onClicked: drawer.close()
+                }
+
+                MyButton {
+                    id: enterButton
+                    text: "Enter"
+                    textColor: "white"
+                    color: "#4CAF50"
                     onClicked: {
-                        listModel.remove(index)
+                        model.title = editTitleBox.text
+                        model.desc = editDescBox.text
+                        drawer.close()
                     }
                 }
-
             }
+
+        }
+
+
+        Image {
+            id: editButton
+            source: "trashimage/edit.png"
+            width: 30
+            height: 30
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.topMargin: 200
+
+            MouseArea {
+                id: editMouse
+                anchors.fill: parent
+                onClicked: drawer.open()
+            }
+
+        }
+
+        Image {
+            id: trashcan
+            source: "trashimage/trashcan.jpg"
+            fillMode: Image.Stretch
+            width: 50
+            height: 50
+
+            anchors {
+                right: parent.right
+                bottom: parent.bottom
+                rightMargin: 2
+                bottomMargin: 2
+            }
+            Rectangle {
+                anchors.fill: parent
+                color: "red"
+                opacity: imageMouse.containsPress ? 0.5 : 0.25
+                radius: 20
+                visible: imageMouse.containsMouse
+            }
+
+            MouseArea {
+                id: imageMouse
+                hoverEnabled: true
+                anchors.fill: parent
+                onClicked: {
+                    listModel.remove(index)
+                }
+            }
+
+        }
 
 
         TextInput {
@@ -73,10 +126,7 @@ Component {
             text: model.title
             font.pixelSize: 18
             clip: true
-            readOnly: __edit
-
-            onTextEdited: model.title = text
-            onTextChanged: if (length > toDoTitle.characterLimit) remove (toDoTitle.characterLimit, length)
+            readOnly: true
 
         }
 
@@ -92,10 +142,7 @@ Component {
             anchors.top: titleTxt.bottom
             clip: true
             wrapMode: TextInput.Wrap
-            readOnly: __edit
-
-            onTextEdited: model.desc = text
-            onTextChanged: if (length > toDoDesc.characterLimit) remove (toDoDesc.characterLimit, length)
+            readOnly: true
 
         }
 
