@@ -68,7 +68,7 @@ Window {
             height: parent.height - 20
             color: "lightblue"
 
-            TextField {
+            MyTextField {
                 id: toDoTitle
                 text: "Title"
                 borderColor: titlePresent ? "black" : "red"
@@ -83,7 +83,7 @@ Window {
 
             }
 
-            TextField {
+            MyTextField {
                 id: toDoDesc
                 text: "Description"
                 height: 50

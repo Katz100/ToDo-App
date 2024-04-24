@@ -21,20 +21,30 @@ Component {
 
             Column {
                 spacing: 10
+                anchors.centerIn: parent
                 Text {
                     text: "Enter new title"
+
                 }
 
-                TextField {
+                MyTextField {
                     id: editTitleBox
+                    focus: true
+                    characterLimit: 30
+                    width: drawer.width
+                    height: 30
+
                 }
 
                 Text {
                     text: "Enter new description"
                 }
 
-                TextField {
+                MyTextField {
                     id: editDescBox
+                    characterLimit: 150
+                    width: drawer.width
+                    height: 50
                 }
             }
             Row {

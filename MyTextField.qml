@@ -20,7 +20,7 @@ FocusScope {
             activeFocusOnTab: true
             color: activeFocus ? "black" : "gray"
             wrapMode: TextInput.Wrap
-            onTextChanged: if (length > characterLimit) remove (characterLimit, length)
+            maximumLength: characterLimit
 
         }
     }

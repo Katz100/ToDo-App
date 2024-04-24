@@ -17,7 +17,7 @@ qt_add_qml_module(appTodo
     VERSION 1.0
     QML_FILES Main.qml
     QML_FILES MyButton.qml
-    QML_FILES TextField.qml
+    QML_FILES MyTextField.qml
 
     RESOURCES
 
